@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base{
+  section{
+    @apply py-[60px]
+  }
+}
+@layer components{
+  .container{
+    @apply max-w-full w-[1200px] px-5 mx-auto
+  }
+  .btn {
+    @apply bg-primary py-2 px-4 rounded-md text-white font-[600]
+  }
+  .heading{
+    @apply text-heading text-[32px] leading-[40px] font-[700]
+  }
+  .text{
+    @apply text-[18px] leading-[30px] font-[400] text-text mt-[12px]
+  }
+}
+*{
+  margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+  font-weight: 500;
+
+  text-decoration: inherit;
+}
+a:hover {
+  color: #0067FF;
+}
+
+body {
+ font-family: "Nunito Sans", sans-serif;
+}
+.sticky_header{
+  position:sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  box-shadow: 3px 3px -8px 3px #dddddd;
+}
+
+@media only screen and (max-width:1024px) {
+  .container {
+    @apply w-full
+  }
+
+  section {
+    @apply py-[20px]
+  }
+    .heading {
+      @apply  text-[20px]  font-[500]
+    }
+  
+    .text {
+      @apply text-[12px]  mt-[8px]
+    }
+}
