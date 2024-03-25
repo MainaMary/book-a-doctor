@@ -5,6 +5,7 @@ import cookeiParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 import authRoute from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -20,9 +21,11 @@ app.use(express.json());
 app.use(cookeiParser());
 app.use(cors(corsOptions));
 app.use("api/v1/auth", authRoute);
+app.use("api/v1/user", userRoutes);
 if (process.env === "development") {
   app.use(morgan("dev"));
 }
+
 //connect to DB
 const connectToDatabase = async () => {
   try {
