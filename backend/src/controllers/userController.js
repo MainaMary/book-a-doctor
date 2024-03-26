@@ -1,5 +1,5 @@
-import UserModel from "../models/UserModel";
-import DoctorModel from "../models/DoctorModel";
+import UserModel from "../models/UserModel.js";
+import DoctorModel from "../models/DoctorModel.js";
 const updateUser = async (req, res) => {
   const id = req.params.id;
   try {
@@ -65,7 +65,7 @@ const getAllUsers = async () => {
 const updateDoctor = async (req, res) => {
   const id = req.params.id;
   try {
-    const user = await DoctorModel.findByIdAndUpdate(
+    const doctor = await DoctorModel.findByIdAndUpdate(
       id,
       { $set: req.body },
       { new: true }
@@ -73,7 +73,7 @@ const updateDoctor = async (req, res) => {
     res.status(200).json({
       message: "User details successfully updated!",
       success: true,
-      data: user,
+      data: doctor,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", success: false });
@@ -83,14 +83,14 @@ const updateDoctor = async (req, res) => {
 const getDoctor = async (req, res) => {
   const id = req.params.id;
   try {
-    const user = await DoctorModel.findById(id);
+    const doctor = await DoctorModel.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({
       message: "User successfully deleted!",
       success: true,
-      data: user,
+      data: doctor,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", success: false });
@@ -100,8 +100,8 @@ const getDoctor = async (req, res) => {
 const deleteDoctor = async (req, res) => {
   const id = req.params.id;
   try {
-    const user = await DoctorModel.findByIdAndDelete(id);
-    if (!user) {
+    const doctor = await DoctorModel.findByIdAndDelete(id);
+    if (!doctor) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({
@@ -114,10 +114,10 @@ const deleteDoctor = async (req, res) => {
 };
 const getAllDoctors = async () => {
   try {
-    const users = await DoctorModel.find({});
+    const doctors = await DoctorModel.find({});
     res.status(200).json({
       message: "Users found",
-      data: users,
+      data: doctors,
       success: true,
     });
   } catch (error) {
