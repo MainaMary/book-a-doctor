@@ -113,6 +113,7 @@ const deleteDoctor = async (req, res) => {
   }
 };
 const getAllDoctors = async (req, res) => {
+  const { query } = req.query;
   try {
     const doctors = await DoctorModel.find({});
     res.status(200).json({
