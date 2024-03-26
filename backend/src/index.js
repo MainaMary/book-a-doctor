@@ -7,6 +7,7 @@ import morgan from "morgan";
 import authRoute from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/api/v1/review", reviewRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/doctor", doctorRoutes);
 
