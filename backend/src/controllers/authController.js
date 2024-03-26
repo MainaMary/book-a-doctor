@@ -15,8 +15,8 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "User already exist" });
     }
     //hash password
-    const salt = bcrypt.genSalt(process.env.salt);
-    const hashpassword = bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashpassword = await bcrypt.hash(password, salt);
 
     if (role === "patient") {
       user = new UserModel({
@@ -32,11 +32,12 @@ const register = async (req, res) => {
       });
     }
     await user.save();
+    delete user._doc.password;
     return res
       .status(201)
       .json({ success: true, message: "User succesfully created", data: user });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 const login = async (req, res) => {
@@ -53,21 +54,23 @@ const login = async (req, res) => {
     if (!user) {
       res.status(404).json({ message: "User does not exist!" });
     }
-    const passwordMatch = bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordMatch) {
       return res.status(400).json({ message: "Invalid user details" });
     }
     const token = generateToken(user);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: user,
-        token,
-        message: "Successfully logged in",
-      });
+
+    //ensure the password is not part of the data response
+    delete user._doc.password;
+    res.status(200).json({
+      success: true,
+      data: user,
+      token,
+      message: "Successfully logged in",
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server error" });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 export { register, login };
