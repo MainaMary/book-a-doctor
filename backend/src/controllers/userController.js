@@ -71,7 +71,7 @@ const updateDoctor = async (req, res) => {
       { new: true }
     );
     res.status(200).json({
-      message: "User details successfully updated!",
+      message: "Doctor details successfully updated!",
       success: true,
       data: doctor,
     });
@@ -84,11 +84,11 @@ const getDoctor = async (req, res) => {
   const id = req.params.id;
   try {
     const doctor = await DoctorModel.findById(id);
-    if (!user) {
+    if (!doctor) {
       return res.status(404).json({ message: "User not found!" });
     }
     res.status(200).json({
-      message: "User successfully deleted!",
+      message: "Doctor found!",
       success: true,
       data: doctor,
     });
@@ -116,7 +116,7 @@ const getAllDoctors = async (req, res) => {
   try {
     const doctors = await DoctorModel.find({});
     res.status(200).json({
-      message: "Users found",
+      message: "Doctors found",
       data: doctors,
       success: true,
     });
