@@ -112,7 +112,7 @@ const deleteDoctor = async (req, res) => {
     res.status(500).json({ message: "Internal server error", success: false });
   }
 };
-const getAllDoctors = async () => {
+const getAllDoctors = async (req, res) => {
   try {
     const doctors = await DoctorModel.find({});
     res.status(200).json({
