@@ -4,10 +4,9 @@ import {
   deleteUser,
   updateUser,
   getUser,
-} from "../controllers/userController";
+} from "../controllers/userController.js";
 const router = express.Router();
-router.get("/", getAllUsers);
-router.get("/:id", getUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
-export default userRoutes;
+router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router.route("/").get(getAllUsers);
+
+export default router;
