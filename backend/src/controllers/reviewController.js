@@ -1,7 +1,14 @@
 import ReviewModel from "../models/ReviewModel.js";
 import DoctorModel from "../models/DoctorModel.js";
+
 const createReview = async (req, res) => {
   const { doctor, user } = req.body;
+  if (!req.body.doctor) {
+    req.body.doctor = req.params.doctorId;
+  }
+  if (!req.body.user) {
+    req.body.doctor = req.userId;
+  }
   const review = new ReviewModel(...req.body);
   try {
     const saveReview = await review.save();
@@ -12,10 +19,14 @@ const createReview = async (req, res) => {
         reviews: saveReview._id,
       },
     });
+    res
+      .status(200)
+      .json({ success: true, message: "Review submitted", data: saveReview });
   } catch (error) {
     res.status(500).json({ success: false, message: "Saving review failed" });
   }
 };
+
 const getAllReviews = async (req, res) => {
   try {
     const reviews = await ReviewModel.find({});
