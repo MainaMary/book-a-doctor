@@ -79,7 +79,7 @@ const Header = () => {
               <FaCircleUser size={24} color="text-text" />
             </Link>
             <Link to={"/auth/login"}>
-              <button className="btn ">Log in</button>
+              <button className="btn cursor-pointer">Log in</button>
             </Link>
             <span className="md:hidden block" onClick={handleToggleMenu}>
               <FaBars />
