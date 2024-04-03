@@ -3,8 +3,8 @@ import Home from "../pages/home";
 import Services from "../pages/services";
 import Doctors from "../pages/doctors/Doctors";
 import DoctorDetails from "../pages/doctors/DoctorDetails";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
+import Login from "../pages/auth/login";
+import Register from "../pages/auth/register";
 const appRoutes = [
   {
     component: <Home />,
