@@ -16,7 +16,7 @@ const appRoutes = [
   },
   {
     component: <Doctors />,
-    path: "/",
+    path: "/doctors",
   },
   {
     component: <DoctorDetails />,
