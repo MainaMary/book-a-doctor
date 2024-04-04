@@ -4,13 +4,24 @@ import Input from "../form/input";
 import Label from "../form/label";
 import Button from "../button";
 const RegisterForm = () => {
+  const [image, setImage] = useState<File>();
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
     name: "",
     gender: "",
+    role: "patient",
+    photo: image,
   });
   const { email, password, name, gender } = formValues;
+  const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files?.length) {
+      setImage(files?.[0]);
+    }
+  };
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setFormValues({ ...formValues, [name]: value });
