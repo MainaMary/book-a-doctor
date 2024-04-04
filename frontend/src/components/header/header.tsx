@@ -58,15 +58,15 @@ const Header = () => {
               <span className="text-2xl font-bold">HealthCare</span>
             </Link>
           </div>
-          <ul className="flex gap-5 h-auto items-center">
+          <ul className="flex gap-5 cursor-pointer h-auto items-center">
             {navLinks.map((label) => (
               <li key={label.id}>
                 <NavLink
                   to={label.path}
                   className={(navClass) =>
                     navClass.isActive
-                      ? "text-primary font-bold text-base"
-                      : "text-base"
+                      ? "text-primary cursor-pointer font-bold text-base"
+                      : "text-base cursor-pointer"
                   }
                 >
                   {label.label}
