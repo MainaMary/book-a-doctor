@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, ChangeEventHandler } from "react";
+import { useState, useRef, ChangeEvent, ChangeEventHandler } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { fileToDataString } from "../../utils";
 import { Link } from "react-router-dom";
@@ -18,8 +18,10 @@ const RegisterForm = () => {
     photo: image,
   });
   const { email, password, name, gender } = formValues;
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { value, name } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
@@ -27,20 +29,30 @@ const RegisterForm = () => {
     event
   ) => {
     const file = event.target.files as FileList;
-    const data = await uploadImageToCloudinary(file[0]);
-    setImage(file?.[0]);
-    console.log({ data });
     if (!file) return;
+    const data = await uploadImageToCloudinary(file[0]);
+
+    console.log(data.url);
+    if (data) {
+      setImage(data.url);
+      setFormValues({ ...formValues, photo: data.url });
+    }
+
     try {
-      const imgUrl = await fileToDataString(file?.[0]);
-      setPreviewUrl(imgUrl);
+      const preview = await fileToDataString(file?.[0]);
+      setPreviewUrl(preview);
+      setImage(data.url);
     } catch (error) {
       console.log(error);
     }
   };
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log({ formValues });
   };
   return (
     <form className="w-full space-y-2 rounded-md" onSubmit={handleSubmit}>
@@ -49,27 +61,40 @@ const RegisterForm = () => {
       </p>
       <div>
         <Label>Email</Label>
-        <Input type="text" value={email} onChange={handleChange} />
+        <Input type="text" name="email" value={email} onChange={handleChange} />
       </div>
       <div>
         <Label>Password</Label>
-        <Input type="password" value={password} onChange={handleChange} />
+        <Input
+          type="password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+        />
       </div>
       <div>
         <Label>Fullname</Label>
-        <Input type="name" value={name} onChange={handleChange} />
+        <Input type="name" name="name" value={name} onChange={handleChange} />
       </div>
-      <div className="flex justify-between gap-3">
+      <div className="flex h-auto items-center gap-3">
         {previewUrl ? (
           <img
             src={previewUrl}
             alt="preview url"
-            className="w-[40px] h-[40px] rounded-full"
+            className="w-[50px] h-[50px] rounded-full shadow-md border"
           />
         ) : (
           <FaRegUserCircle />
         )}
-        <input type="file" onChange={handleImageUpload} />
+        <Button onClick={handleButtonClick} className="py-1">
+          {previewUrl ? "Edit image" : "Upload image"}
+        </Button>
+        <input
+          className="hidden"
+          type="file"
+          onChange={handleImageUpload}
+          ref={fileInputRef}
+        />
       </div>
       <div className="flex justify-between gap-3">
         <div className="w-1/2">
@@ -87,6 +112,8 @@ const RegisterForm = () => {
           <Label>Gender</Label>
           <select
             id="small"
+            value={gender}
+            onChange={handleChange}
             className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option selected>Gender</option>
