@@ -1,11 +1,14 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, ChangeEventHandler } from "react";
+import { FaRegUserCircle } from "react-icons/fa";
+import { fileToDataString } from "../../utils";
 import { Link } from "react-router-dom";
 import Input from "../form/input";
 import Label from "../form/label";
 import Button from "../button";
+import { uploadImageToCloudinary } from "../../utils";
 const RegisterForm = () => {
   const [image, setImage] = useState<File>();
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
@@ -15,17 +18,27 @@ const RegisterForm = () => {
     photo: image,
   });
   const { email, password, name, gender } = formValues;
-  const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files?.length) {
-      setImage(files?.[0]);
-    }
-  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
+  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = async (
+    event
+  ) => {
+    const file = event.target.files as FileList;
+    const data = await uploadImageToCloudinary(file[0]);
+    setImage(file?.[0]);
+    console.log({ data });
+    if (!file) return;
+    try {
+      const imgUrl = await fileToDataString(file?.[0]);
+      setPreviewUrl(imgUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
@@ -45,6 +58,18 @@ const RegisterForm = () => {
       <div>
         <Label>Fullname</Label>
         <Input type="name" value={name} onChange={handleChange} />
+      </div>
+      <div className="flex justify-between gap-3">
+        {previewUrl ? (
+          <img
+            src={previewUrl}
+            alt="preview url"
+            className="w-[40px] h-[40px] rounded-full"
+          />
+        ) : (
+          <FaRegUserCircle />
+        )}
+        <input type="file" onChange={handleImageUpload} />
       </div>
       <div className="flex justify-between gap-3">
         <div className="w-1/2">
