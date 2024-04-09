@@ -1,23 +1,35 @@
 import { useState, useRef, ChangeEvent, ChangeEventHandler } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useQueryClient } from "@tanstack/react-query";
 import { fileToDataString } from "../../utils";
 import { Link } from "react-router-dom";
 import Input from "../form/input";
 import Label from "../form/label";
 import Button from "../button";
 import { uploadImageToCloudinary } from "../../utils";
+import usePostRequest from "../../api/useMutation";
+import { registerUser } from "../../api/services";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "../../constants/config";
+import axios from "axios";
 const RegisterForm = () => {
+  const queryClient = useQueryClient();
   const [image, setImage] = useState<File>();
   const [previewUrl, setPreviewUrl] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
     name: "",
-    gender: "",
+    gender: "male",
     role: "patient",
     photo: image,
   });
+
   const { email, password, name, gender } = formValues;
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -25,9 +37,11 @@ const RegisterForm = () => {
     const { value, name } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
+
   const handleImageUpload: ChangeEventHandler<HTMLInputElement> = async (
     event
   ) => {
+    event.preventDefault();
     const file = event.target.files as FileList;
     if (!file) return;
     const data = await uploadImageToCloudinary(file[0]);
@@ -46,14 +60,54 @@ const RegisterForm = () => {
       console.log(error);
     }
   };
-  const handleButtonClick = () => {
+  const handleButtonClick = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
     fileInputRef.current?.click();
   };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSuccess = (data: any) => {
+    console.log({ data });
+    toast.success("User registered succesfully");
+    queryClient.invalidateQueries({
+      predicate: (query: any) => query.queryKey.includes("register"),
+    });
+    navigate("/auth/login");
+  };
+  const onFailure = (error: any) => {
+    toast.error(error.message);
+  };
+  // const { isError, isSuccess, status, mutate } = usePostRequest(
+  //   "/auth/register",
+  //   formValues,
+  //   onSuccess,
+  //   onFailure
+  // );
+  const { status, error, mutate } = useMutation({
+    mutationFn: registerUser,
+    onSuccess,
+    onError: onFailure,
+  });
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ formValues });
+    // mutate(formValues);
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/auth/register",
+        formValues
+      );
+      console.log({ response });
+      if (response.data) {
+        toast.success("User created");
+      }
+      navigate("/auth/login");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
+  if (status === "error") {
+    return <div className="error">{`An error has occurred: ${error}`}</div>;
+  }
   return (
     <form className="w-full space-y-2 rounded-md" onSubmit={handleSubmit}>
       <p className="text-xl font-semibold">
@@ -86,7 +140,12 @@ const RegisterForm = () => {
         ) : (
           <FaRegUserCircle />
         )}
-        <Button onClick={handleButtonClick} className="py-1">
+        <Button
+          onClick={(event: ChangeEvent<HTMLFormElement>) =>
+            handleButtonClick(event)
+          }
+          className="py-1"
+        >
           {previewUrl ? "Edit image" : "Upload image"}
         </Button>
         <input
@@ -123,8 +182,9 @@ const RegisterForm = () => {
           </select>
         </div>
       </div>
+
       <Button type="submit" className="m-auto w-full">
-        Create an account
+        {status === "pending" ? "Loading" : "Create an ccount"}
       </Button>
       <div>
         <p>
