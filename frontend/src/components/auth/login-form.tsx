@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import Input from "../form/input";
 import Label from "../form/label";
 import Button from "../button";
+import { api } from "../../constants/config";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/useAuthContext";
+
 const LoginForm = () => {
   const [formValues, setFormValues] = useState({
     email: "",
@@ -11,12 +16,34 @@ const LoginForm = () => {
     gender: "",
   });
   const { email, password } = formValues;
+  const navigate = useNavigate();
+  const { setUserDetails } = useAuth();
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    try {
+      const response = await api.post("/auth/login", formValues);
+      if (response.data) {
+        toast.success(response.data.message);
+        const { _id, email, name, phone, role } = response?.data?.data;
+        setUserDetails({
+          data: {
+            _id,
+            email,
+            name,
+            phone,
+            role,
+          },
+          token: response.data.token,
+        });
+        navigate("/doctors");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <form className="w-full space-y-2 rounded-md" onSubmit={handleSubmit}>
@@ -25,11 +52,16 @@ const LoginForm = () => {
       </p>
       <div>
         <Label>Email</Label>
-        <Input type="text" value={email} onChange={handleChange} />
+        <Input type="text" value={email} name="email" onChange={handleChange} />
       </div>
       <div>
         <Label>Password</Label>
-        <Input type="password" value={password} onChange={handleChange} />
+        <Input
+          type="password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+        />
       </div>
 
       <Button type="submit" className="m-auto w-full">
