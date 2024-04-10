@@ -3,6 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import { FaCircleUser } from "react-icons/fa6";
 import { FaBars } from "react-icons/fa";
 import { useRef, useEffect, useState } from "react";
+import { useAuth } from "../../context/useAuthContext";
 const navLinks = [
   {
     path: "/",
@@ -32,6 +33,7 @@ const Header = () => {
   const handleToggleMenu = () => {
     setOpenMenu((prev) => !prev);
   };
+  const { userDetails } = useAuth();
   useEffect(() => {
     const handleStickyNavbar = () => {
       window.addEventListener("scroll", () => {
@@ -47,7 +49,7 @@ const Header = () => {
     handleStickyNavbar();
     return () => window.removeEventListener("scroll", handleStickyNavbar);
   }, []);
-
+  console.log(userDetails.data);
   return (
     <header className=" flex items-center header">
       <div className="container">
@@ -78,9 +80,16 @@ const Header = () => {
             <Link to={"/"} className="hidden">
               <FaCircleUser size={24} color="text-text" />
             </Link>
-            <Link to={"/auth/login"}>
-              <button className="btn cursor-pointer">Log in</button>
-            </Link>
+            {userDetails?.data ? (
+              <div>
+                <p>{userDetails?.data.name}</p>
+              </div>
+            ) : (
+              <Link to={"/auth/login"}>
+                <button className="btn cursor-pointer">Log in</button>
+              </Link>
+            )}
+
             <span className="md:hidden block" onClick={handleToggleMenu}>
               <FaBars />
             </span>
