@@ -4,7 +4,9 @@ import React, {
   useCallback,
   ReactNode,
   useContext,
+  useEffect,
 } from "react";
+import Cookies from "js-cookie";
 interface ResponseType {
   _id: string;
   email: string;
@@ -37,9 +39,19 @@ interface IProps {
 export const AuthContext = createContext<AuthContextType | null>(null);
 const AuthContextProvider = ({ children }: IProps) => {
   const [userDetails, setUserDetails] = useState({
-    data: { _id: "", email: "", name: "", phone: 0, role: "" },
+    data: localStorage.getItem("userDetails")
+      ? JSON.parse(localStorage.getItem("userDetails") || "")
+      : { _id: "", email: "", name: "", phone: 0, role: "" },
     token: "",
   });
+  useEffect(() => {
+    localStorage.setItem("userDetails", JSON.stringify(userDetails?.data));
+    const expiryDate = new Date();
+    expiryDate.setTime(expiryDate.getTime() + 24 * 60 * 60 * 1000);
+    Cookies.set("access_token", userDetails.token, {
+      expires: expiryDate,
+    });
+  }, [userDetails]);
   const value = { userDetails, setUserDetails };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
