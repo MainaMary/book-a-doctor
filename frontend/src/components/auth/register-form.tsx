@@ -75,12 +75,7 @@ const RegisterForm = () => {
   const onFailure = (error: any) => {
     toast.error(error.message);
   };
-  // const { isError, isSuccess, status, mutate } = usePostRequest(
-  //   "/auth/register",
-  //   formValues,
-  //   onSuccess,
-  //   onFailure
-  // );
+
   const { status, error, mutate } = useMutation({
     mutationFn: registerUser,
     onSuccess,
@@ -89,21 +84,7 @@ const RegisterForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({ formValues });
-    // mutate(formValues);
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/auth/register",
-        formValues
-      );
-      console.log({ response });
-      if (response.data) {
-        toast.success("User created");
-      }
-      navigate("/auth/login");
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error.message);
-    }
+    mutate(formValues);
   };
   if (status === "error") {
     return <div className="error">{`An error has occurred: ${error}`}</div>;
