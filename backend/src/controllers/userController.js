@@ -50,6 +50,27 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Internal server error", success: false });
   }
 };
+
+const getUserProfile = async (req, res) => {
+  const userId = req.id;
+  try {
+    const user = UserModel.findById(userId);
+    if (!user) {
+      res.status().json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    const { password, ...rest } = user._doc;
+    res.status(200).json({
+      message: "User profile data",
+      success: true,
+      data: { ...rest },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", success: false });
+  }
+};
 const getAllUsers = async () => {
   try {
     const users = await UserModel.find({});
@@ -62,6 +83,7 @@ const getAllUsers = async () => {
     res.status(500).json({ message: "Internal server error", success: false });
   }
 };
+
 const updateDoctor = async (req, res) => {
   const id = req.params.id;
   try {
@@ -130,6 +152,7 @@ export {
   deleteUser,
   getUser,
   getAllUsers,
+  getUserProfile,
   deleteDoctor,
   getDoctor,
   updateDoctor,
