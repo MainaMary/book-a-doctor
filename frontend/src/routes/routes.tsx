@@ -5,8 +5,8 @@ import Doctors from "../pages/doctors/Doctors";
 import DoctorDetails from "../pages/doctors/DoctorDetails";
 import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
-import DoctorDashboard from "../pages/dahsboard/DoctorDashboard";
-import UserDashboard from "../pages/dahsboard/UserDashboard";
+import DoctorDashboard from "../pages/dahsboard/doctor/DoctorDashboard";
+import UserDashboard from "../pages/dahsboard/user/UserDashboard";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
 const appRoutes = [
