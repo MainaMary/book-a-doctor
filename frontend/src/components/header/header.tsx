@@ -29,6 +29,7 @@ const navLinks = [
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
+
   const navRef = useRef<HTMLDivElement | null>(null);
   const handleToggleMenu = () => {
     setOpenMenu((prev) => !prev);
