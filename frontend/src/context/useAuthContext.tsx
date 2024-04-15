@@ -13,6 +13,7 @@ interface ResponseType {
   name: string;
   phone: number;
   role: string;
+  photo: string;
 }
 interface AuthContextType {
   userDetails: {
@@ -27,6 +28,7 @@ interface AuthContextType {
         name: string;
         phone: number;
         role: string;
+        photo: string;
       };
       token: string;
     }>
@@ -36,12 +38,20 @@ interface AuthContextType {
 interface IProps {
   children: ReactNode;
 }
+const defaultValues = {
+  _id: "",
+  email: "",
+  name: "",
+  phone: 0,
+  role: "",
+  photo: "",
+};
 export const AuthContext = createContext<AuthContextType | null>(null);
 const AuthContextProvider = ({ children }: IProps) => {
   const [userDetails, setUserDetails] = useState({
     data: localStorage.getItem("userDetails")
       ? JSON.parse(localStorage.getItem("userDetails") || "")
-      : { _id: "", email: "", name: "", phone: 0, role: "" },
+      : defaultValues,
     token: "",
   });
   useEffect(() => {
