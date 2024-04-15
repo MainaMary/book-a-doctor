@@ -1,6 +1,6 @@
 interface ButtonProps {
   className?: string;
-  onClick?: () => void;
+  onClick?: (x: any) => void;
   type?: "submit" | "reset";
   children: string;
 }
