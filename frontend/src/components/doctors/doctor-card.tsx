@@ -19,8 +19,12 @@ const DoctorCard = ({ doctor }: Props) => {
     doctor;
   return (
     <div className="p-3 lg:p-5 border shadow-md">
-      <div className="h-[400px] w-[350px]">
-        <img className="rounded-md w-auto h-auto" src={photo} alt={name} />
+      <div className="h-[400px] w-[350px] ">
+        <img
+          className="rounded-md w-auto cover  h-auto"
+          src={photo}
+          alt={name}
+        />
       </div>
       <h2 className="text-[12px] eading-30 lg:text-[16px] text-heading font-bold">
         {name}
