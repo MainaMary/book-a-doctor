@@ -28,13 +28,15 @@ const LoginForm = () => {
       const response = await api.post("/auth/login", formValues);
       if (response.data) {
         toast.success(response.data.message);
-        const { _id, email, name, phone, role } = response?.data?.data;
+        console.log(response.data);
+        const { _id, email, name, phone, role, photo } = response?.data?.data;
         setUserDetails({
           data: {
             _id,
             email,
             name,
             phone,
+            photo,
             role,
           },
           token: response.data.token,
