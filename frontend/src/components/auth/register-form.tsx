@@ -122,9 +122,7 @@ const RegisterForm = () => {
           <FaRegUserCircle />
         )}
         <Button
-          onClick={(event: ChangeEvent<HTMLFormElement>) =>
-            handleButtonClick(event)
-          }
+          onClick={(event: any) => handleButtonClick(event)}
           className="py-1"
         >
           {previewUrl ? "Edit image" : "Upload image"}
