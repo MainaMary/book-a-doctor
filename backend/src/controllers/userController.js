@@ -53,7 +53,9 @@ const deleteUser = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  const userId = req.id;
+  const userId = req.params.id;
+  console.log(`userId ${userId}`);
+
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -72,7 +74,7 @@ const getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Internal server error", success: false });
   }
 };
-const getAllUsers = async () => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await UserModel.find({});
     res.status(200).json({
@@ -170,7 +172,7 @@ const getAllDoctors = async (req, res) => {
   }
 };
 const getDoctorProfile = async (req, res) => {
-  const doctorId = req.id;
+  const doctorId = req.params.id;
   try {
     const doctor = await UserModel.findById(doctorId);
     if (!doctor) {
