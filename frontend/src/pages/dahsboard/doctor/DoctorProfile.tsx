@@ -1,9 +1,16 @@
+import { useState } from "react";
 import { useAuth } from "../../../context/useAuthContext";
+import Button from "../../../components/button";
+import AppointMentModal from "../../../components/modal/AppointMentModal";
 const DoctorProfile = () => {
+  const [openModal, setOpenModal] = useState(false);
   const {
     userDetails: { data },
   } = useAuth();
   console.log({ data });
+  const handleModal = () => {
+    setOpenModal((prev) => !prev);
+  };
   return (
     <div className="px-6">
       <div className="w-[100px] mb-2 h-[100px] border border-solid rounded-full">
@@ -19,6 +26,10 @@ const DoctorProfile = () => {
           reprehenderit architecto placeat.
         </p>
         <p className="text-primary underline cursor-pointer">Edit profile</p>
+        <Button onClick={handleModal}>Book an appointment</Button>
+        {openModal && (
+          <AppointMentModal openModal={openModal} handleModal={handleModal} />
+        )}
       </div>
     </div>
   );
