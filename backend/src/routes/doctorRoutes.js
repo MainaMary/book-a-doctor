@@ -5,7 +5,7 @@ import {
   updateDoctor,
   deleteDoctor,
   getDoctorProfile,
-} from "../controllers/userController.js";
+} from "../controllers/doctorController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 const router = express.Router();
 router.get("/", verifyToken, getAllDoctors);

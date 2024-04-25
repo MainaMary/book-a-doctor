@@ -11,7 +11,7 @@ const router = express.Router();
 router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
 router.route("/").get(getAllUsers);
 router.route("/").get(getUserProfile);
-// router.get("/profile/user/:id", getUserProfile);
+router.get("/profile/:id", getUserProfile);
 router.get("appointments/my-appointments/:id", getUserAppointments);
 
 export default router;
