@@ -16,7 +16,10 @@ export type ErrorType = {
   errors: any;
 };
 
-export default function useFetch(name: any, path: string): FetchResults {
+export default function useFetch(
+  name: string | string[] | any,
+  path: string
+): FetchResults {
   const {
     isLoading,
     isSuccess,
