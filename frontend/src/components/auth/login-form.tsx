@@ -28,7 +28,6 @@ const LoginForm = () => {
       const response = await api.post("/auth/login", formValues);
       if (response.data) {
         toast.success(response.data.message);
-        console.log(response.data);
         const { _id, email, name, phone, role, photo } = response?.data?.data;
         setUserDetails({
           data: {
@@ -54,14 +53,21 @@ const LoginForm = () => {
       </p>
       <div>
         <Label>Email</Label>
-        <Input type="text" value={email} name="email" onChange={handleChange} />
+        <input
+          className="input"
+          type="text"
+          value={email}
+          name="email"
+          onChange={handleChange}
+        />
       </div>
       <div>
         <Label>Password</Label>
-        <Input
+        <input
           type="password"
           name="password"
           value={password}
+          className="input"
           onChange={handleChange}
         />
       </div>
