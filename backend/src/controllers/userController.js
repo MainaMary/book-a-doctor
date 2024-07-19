@@ -71,7 +71,7 @@ const getUserProfile = async (req, res) => {
       data: { ...rest },
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", success: false });
+    res.status(500).json({ message: error.message, success: false });
   }
 };
 const getAllUsers = async (req, res) => {
