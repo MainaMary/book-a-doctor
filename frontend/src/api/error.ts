@@ -2,12 +2,12 @@ import { AxiosError } from "axios";
 
 export const makeErrorMessage = (error: AxiosError) => {
   try {
-    if (error.response?.status === 404) {
-      return error.response?.data.message || "Resource not found";
+    if (error?.response?.status === 404) {
+      return error?.response?.data.message || "Resource not found";
     }
 
     if (error.response?.status === 401) {
-      return "Not authorized";
+      return "Unauthorized request";
     }
 
     if (error?.response?.data?.message) {
